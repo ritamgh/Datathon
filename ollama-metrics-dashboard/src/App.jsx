@@ -1,10 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 import InteractiveBackground from "./components/Background/InteractiveBackground";
 import Header from "./components/Header/Header";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import HomePage from "./Pages/Home/HomePage";
+// Change this import to point to the correct location:
+import HomePage from "./components/Home/HomePage";
 
 function App() {
   return (

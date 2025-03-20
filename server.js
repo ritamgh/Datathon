@@ -65,6 +65,21 @@ app.get("/api/metrics/:filename", (req, res) => {
   }
 });
 
+app.get("/api/llm-metrics", (req, res) => {
+  // Return aggregated metrics from metrics_results directory
+  const result = {
+    performance: require("./metrics_results/performance_metrics.json"),
+    // Add other metrics data
+  };
+  res.json(result);
+});
+
+app.get("/api/metrics/:filename", (req, res) => {
+  // Return specific metrics file
+  const filePath = path.join(__dirname, "metrics_results", req.params.filename);
+  // Add file reading logic here
+});
+
 // New endpoint to query the LLM
 // Update the query endpoint with better error handling
 
