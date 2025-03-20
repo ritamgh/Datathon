@@ -1,66 +1,148 @@
-.dashboard {
-    padding: 20px;
-    color: #ffffff;
+/* Dashboard container with sidebar */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0d0b1a;
   }
   
-  .dashboard-title {
-    font-size: 1.5rem;
-    font-weight: 500;
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px;
+    background-color: #1a1a2e;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+  
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 25px 20px;
     margin-bottom: 20px;
-    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
   
+  .logo-icon {
+    color: #4cd964;
+    margin-right: 10px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .sidebar-section {
+    margin-bottom: 25px;
+  }
+  
+  .section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #a1a1b5;
+    padding: 0 20px;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .menu-item.active {
+    background-color: rgba(46, 100, 254, 0.1);
+    color: #ffffff;
+    border-left: 3px solid #2e64fe;
+  }
+  
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .menu-icon {
+    margin-right: 12px;
+  }
+  
+  .badge {
+    background-color: #ff3b30;
+    color: white;
+    font-size: 0.7rem;
+    border-radius: 10px;
+    padding: 2px 7px;
+    margin-left: auto;
+  }
+  
+  /* Main content area */
+  .dashboard-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  /* New grid layout matching the reference image */
   .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: minmax(100px, auto);
+    grid-template-rows: auto auto auto;
     gap: 16px;
   }
   
-  /* Card layouts */
-  .revenue-card {
+  /* Card positioning based on the reference image */
+  .total-revenue-card {
+    grid-column: span 4;
+    grid-row: 1;
+  }
+  
+  .sales-funnel-card {
+    grid-column: span 5;
+    grid-row: 1;
+  }
+  
+  .ongoing-sale-card {
     grid-column: span 3;
-    grid-row: span 2;
+    grid-row: 1;
   }
   
-  .sales-funnel {
-    grid-column: span 6;
-    grid-row: span 3;
+  .customers-countries-card {
+    grid-column: span 4;
+    grid-row: 2;
   }
   
-  .ongoing-sale {
+  .device-visits-card {
+    grid-column: span 5;
+    grid-row: 2;
+  }
+  
+  .top-products-card {
     grid-column: span 3;
-    grid-row: span 3;
+    grid-row: 2;
   }
   
-  .revenue-sources {
+  .recent-transactions-card {
+    grid-column: span 9;
+    grid-row: 3;
+  }
+  
+  .target-metrics-card {
     grid-column: span 3;
-    grid-row: span 2;
+    grid-row: 3;
   }
   
-  .countries-map {
+  /* Ensure the intensity chart is included */
+  .intensity-chart-card {
     grid-column: span 3;
-    grid-row: span 3;
-  }
-  
-  .device-visits {
-    grid-column: span 3;
-    grid-row: span 3;
-  }
-  
-  .top-products {
-    grid-column: span 3;
-    grid-row: span 5;
-  }
-  
-  .recent-transactions {
-    grid-column: span 6;
-    grid-row: span 2;
-  }
-  
-  .target-metrics {
-    grid-column: span 3;
-    grid-row: span 3;
+    grid-row: 4;
   }
   
   /* Card styling */
@@ -88,233 +170,191 @@
   }
   
   .period-selector {
-    position: relative;
-  }
-  
-  .selected-period {
     display: flex;
     align-items: center;
+    background-color: #2a2a3a;
+    border-radius: 6px;
+    padding: 4px 10px;
     font-size: 0.8rem;
     color: #a1a1b5;
     cursor: pointer;
-    background-color: #2a2a3a;
-    padding: 6px 12px;
-    border-radius: 6px;
   }
   
-  .selected-period::after {
-    content: "▼";
-    font-size: 0.7rem;
-    margin-left: 6px;
+  .period-selector:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #a1a1b5;
+    margin-left: 8px;
   }
   
-  .period-dropdown {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background-color: #2a2a3a;
-    border-radius: 6px;
-    padding: 6px 0;
-    min-width: 120px;
-    z-index: 100;
-    margin-top: 4px;
-  }
-  
-  .period-option {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-  }
-  
-  .period-option:hover {
-    background-color: #3a3a4a;
-  }
-  
-  /* Total revenue card */
-  .revenue-value {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
-  
-  .revenue-growth {
-    display: flex;
-    align-items: center;
-    color: #4cd964;
-    font-weight: 500;
-    margin-bottom: 6px;
-  }
-  
-  .revenue-compared {
-    font-size: 0.85rem;
-    color: #a1a1b5;
-  }
-  
-  /* Bar charts */
-  .bar-chart {
-    display: flex;
-    height: 8px;
-    background-color: #2a2a3a;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 8px 0;
-  }
-  
-  .bar {
-    height: 100%;
-    transition: width 0.5s ease;
-  }
-  
-  .bar-blue {
-    background-color: #2e64fe;
-  }
-  
-  .bar-yellow {
-    background-color: #ffcc00;
-  }
-  
-  .bar-green {
-    background-color: #4cd964;
-  }
-  
-  .bar-purple {
-    background-color: #8022ef;
-  }
-  
-  /* Progress indicators */
-  .progress-bar {
-    height: 6px;
-    background-color: #2a2a3a;
-    border-radius: 3px;
-    overflow: hidden;
-    margin: 8px 0;
-  }
-  
-  .progress {
-    height: 100%;
-    background-color: #2e64fe;
-    transition: width 0.5s ease;
-  }
-  
-  .progress-yellow {
-    background-color: #ffcc00;
-  }
-  
-  .progress-orange {
-    background-color: #ff9500;
-  }
-  
-  /* Cards with lists */
-  .list-item {
+  /* Top header with search and user info */
+  .top-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #2a2a3a;
-    padding: 12px 0;
+    padding: 10px 20px;
+    background-color: #1a1a2e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
   
-  .list-item:last-child {
-    border-bottom: none;
+  .top-header-left {
+    font-weight: bold;
+    font-size: 1.2rem;
   }
   
-  .list-item-icon {
-    width: 32px;
-    height: 32px;
-    background-color: #2a2a3a;
-    border-radius: 50%;
+  .top-header-right {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-right: 12px;
+    gap: 15px;
   }
   
-  .list-item-content {
-    flex: 1;
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #2a2a3a;
+    border-radius: 20px;
+    padding: 6px 12px;
   }
   
-  .list-item-title {
+  .search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 200px;
     font-size: 0.9rem;
-    margin-bottom: 4px;
   }
   
-  .list-item-subtitle {
-    font-size: 0.8rem;
+  .search-bar svg {
+    margin-right: 8px;
     color: #a1a1b5;
   }
   
-  .list-item-value {
-    text-align: right;
+  .theme-toggle, .notification-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #2a2a3a;
+    cursor: pointer;
   }
   
-  .list-item-number {
-    font-weight: 500;
+  .user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #2e64fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-name {
     font-size: 0.9rem;
-    margin-bottom: 4px;
+    font-weight: 500;
   }
   
-  .list-item-change {
-    font-size: 0.8rem;
-    color: #4cd964;
+  .user-role {
+    font-size: 0.7rem;
+    color: #a1a1b5;
   }
   
-  /* Status indicators */
-  .status {
-    font-size: 0.8rem;
-    padding: 4px 10px;
-    border-radius: 12px;
-    display: inline-block;
+  /* Animation keyframes remain the same */
+  @keyframes pulseDot {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
   }
   
-  .status-success {
-    background-color: rgba(76, 217, 100, 0.15);
-    color: #4cd964;
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
   
-  .status-pending {
-    background-color: rgba(255, 149, 0, 0.15);
-    color: #ff9500;
+  .refresh-icon {
+    transition: transform 0.3s ease;
   }
   
-  /* Charts */
-  .chart-container {
-    flex: 1;
-    position: relative;
-    min-height: 150px;
+  .refresh-icon:hover {
+    transform: rotate(30deg);
   }
   
-  /* Responsive adjustments */
+  .refresh-icon.spinning {
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Responsiveness */
   @media (max-width: 1200px) {
     .dashboard-grid {
       grid-template-columns: repeat(6, 1fr);
     }
     
-    .revenue-card, 
-    .sales-funnel,
-    .ongoing-sale,
-    .revenue-sources,
-    .countries-map,
-    .device-visits,
-    .top-products,
-    .recent-transactions,
-    .target-metrics {
-      grid-column: span 3;
+    .total-revenue-card, 
+    .sales-funnel-card,
+    .ongoing-sale-card,
+    .customers-countries-card,
+    .device-visits-card,
+    .top-products-card,
+    .recent-transactions-card,
+    .target-metrics-card {
+      grid-column: span 6;
     }
   }
   
   @media (max-width: 768px) {
-    .dashboard-grid {
-      grid-template-columns: repeat(1, 1fr);
+    .dashboard-container {
+      flex-direction: column;
     }
     
-    .revenue-card, 
-    .sales-funnel,
-    .ongoing-sale,
-    .revenue-sources,
-    .countries-map,
-    .device-visits,
-    .top-products,
-    .recent-transactions,
-    .target-metrics {
+    .sidebar {
+      width: 100%;
+      height: auto;
+    }
+    
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .total-revenue-card, 
+    .sales-funnel-card,
+    .ongoing-sale-card,
+    .customers-countries-card,
+    .device-visits-card,
+    .top-products-card,
+    .recent-transactions-card,
+    .target-metrics-card {
       grid-column: span 1;
     }
   }

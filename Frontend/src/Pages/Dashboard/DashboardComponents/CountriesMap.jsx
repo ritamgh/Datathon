@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CountriesMap = ({ data }) => {
   const [selectedRegion, setSelectedRegion] = useState('Asia');
+  const [animationStarted, setAnimationStarted] = useState(false);
+  
+  // Start animation when component mounts
+  useEffect(() => {
+    setAnimationStarted(true);
+  }, []);
   
   const regions = ['Asia', 'Europe', 'Americas', 'Africa', 'Oceania'];
   
@@ -9,7 +15,16 @@ const CountriesMap = ({ data }) => {
     <div className="card">
       <div className="card-header">
         <div className="card-title">Customer Countries</div>
-        <div className="total-customers" style={{ fontSize: '0.85rem', color: '#a1a1b5' }}>
+        <div 
+          className="total-customers stat-number" 
+          style={{ 
+            fontSize: '0.85rem', 
+            color: '#a1a1b5',
+            opacity: 0,
+            animation: animationStarted ? 'fadeIn 0.5s ease forwards' : 'none',
+            animationDelay: '0.3s'
+          }}
+        >
           124,285
           <span style={{ marginLeft: '4px', fontSize: '0.8rem' }}>
             total visits
@@ -17,7 +32,15 @@ const CountriesMap = ({ data }) => {
         </div>
       </div>
       
-      <div className="region-selector" style={{ marginTop: '16px' }}>
+      <div 
+        className="region-selector" 
+        style={{ 
+          marginTop: '16px',
+          opacity: 0,
+          animation: animationStarted ? 'fadeIn 0.5s ease forwards' : 'none',
+          animationDelay: '0.5s'
+        }}
+      >
         <select 
           value={selectedRegion}
           onChange={(e) => setSelectedRegion(e.target.value)}
@@ -40,7 +63,16 @@ const CountriesMap = ({ data }) => {
         </select>
       </div>
       
-      <div className="world-map" style={{ margin: '20px 0', textAlign: 'center' }}>
+      <div 
+        className="world-map" 
+        style={{ 
+          margin: '20px 0', 
+          textAlign: 'center',
+          opacity: 0,
+          animation: animationStarted ? 'fadeIn 1s ease forwards' : 'none',
+          animationDelay: '0.7s'
+        }}
+      >
         {/* Simplified World Map SVG */}
         <svg width="100%" height="150" viewBox="0 0 240 150" fill="none">
           <path d="M12,35 L28,32 L45,30 L60,40 L75,35 L85,45 L100,40 L115,42 L130,38 L140,45 L155,42 L170,48 L185,50 L200,45 L215,50 L228,40" 
@@ -51,10 +83,34 @@ const CountriesMap = ({ data }) => {
                 stroke="#2a2a3a" strokeWidth="1" fill="#2a2a3a" />
                 
           {/* Highlighted points for the selected countries */}
-          <circle cx="85" cy="75" r="5" fill="#2e64fe" opacity="0.8" /> {/* Indonesia */}
-          <circle cx="100" cy="68" r="4" fill="#2e64fe" opacity="0.7" /> {/* Malaysia */}
-          <circle cx="105" cy="72" r="3" fill="#2e64fe" opacity="0.5" /> {/* Singapore */}
-          <circle cx="130" cy="38" r="3" fill="#2e64fe" opacity="0.4" /> {/* Japan */}
+          <circle 
+            cx="85" cy="75" r="5" fill="#2e64fe" opacity="0"
+            style={{
+              animation: animationStarted ? 'pulseDot 2s ease-in-out infinite' : 'none',
+              animationDelay: '1s'
+            }}
+          /> {/* Indonesia */}
+          <circle 
+            cx="100" cy="68" r="4" fill="#2e64fe" opacity="0"
+            style={{
+              animation: animationStarted ? 'pulseDot 2s ease-in-out infinite' : 'none',
+              animationDelay: '1.2s'
+            }}
+          /> {/* Malaysia */}
+          <circle 
+            cx="105" cy="72" r="3" fill="#2e64fe" opacity="0"
+            style={{
+              animation: animationStarted ? 'pulseDot 2s ease-in-out infinite' : 'none',
+              animationDelay: '1.4s'
+            }}
+          /> {/* Singapore */}
+          <circle 
+            cx="130" cy="38" r="3" fill="#2e64fe" opacity="0"
+            style={{
+              animation: animationStarted ? 'pulseDot 2s ease-in-out infinite' : 'none',
+              animationDelay: '1.6s'
+            }}
+          /> {/* Japan */}
         </svg>
       </div>
       
@@ -66,7 +122,10 @@ const CountriesMap = ({ data }) => {
             style={{ 
               display: 'flex', 
               alignItems: 'center',
-              marginBottom: index === data.length - 1 ? 0 : '12px'
+              marginBottom: index === data.length - 1 ? 0 : '12px',
+              opacity: 0,
+              animation: animationStarted ? 'fadeIn 0.5s ease forwards' : 'none',
+              animationDelay: `${1.8 + index * 0.2}s`
             }}
           >
             <div className="country-flag" style={{ marginRight: '12px', width: '24px', height: '16px' }}>
