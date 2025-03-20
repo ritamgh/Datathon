@@ -4,9 +4,20 @@ import BiasRadarChart from "./BiasRadarChart";
 import PerformanceGauges from "./PerformanceGauges";
 import QueryInterface from "./QueryInterface";
 
+/**
+ * DashboardLayout Component
+ *
+ * Main layout component that manages navigation between different
+ * sections of the LLM metrics dashboard.
+ */
 const DashboardLayout = () => {
+  // State to track which tab is currently active
   const [activeTab, setActiveTab] = useState("overview");
 
+  /**
+   * Renders the appropriate content based on the active tab
+   * @returns {JSX.Element} The content for the active tab
+   */
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
@@ -33,6 +44,7 @@ const DashboardLayout = () => {
             </div>
           </>
         );
+
       case "bias":
         return (
           <>
@@ -49,6 +61,7 @@ const DashboardLayout = () => {
             </div>
           </>
         );
+
       case "performance":
         return (
           <>
@@ -63,6 +76,7 @@ const DashboardLayout = () => {
             <PerformanceGauges />
           </>
         );
+
       case "query":
         return (
           <>
@@ -76,42 +90,38 @@ const DashboardLayout = () => {
             <QueryInterface />
           </>
         );
+
       default:
-        return <div>Select a tab to view metrics</div>;
+        return <div className="empty-state">Select a tab to view metrics</div>;
     }
   };
 
+  // Tab item configuration for cleaner rendering
+  const tabItems = [
+    { id: "overview", label: "Overview" },
+    { id: "bias", label: "Bias Metrics" },
+    { id: "performance", label: "Performance" },
+    { id: "query", label: "Query LLM" },
+  ];
+
   return (
     <div className="dashboard-container">
+      {/* Navigation sidebar */}
       <nav className="dashboard-nav">
         <ul>
-          <li
-            className={activeTab === "overview" ? "active" : ""}
-            onClick={() => setActiveTab("overview")}
-          >
-            Overview
-          </li>
-          <li
-            className={activeTab === "bias" ? "active" : ""}
-            onClick={() => setActiveTab("bias")}
-          >
-            Bias Metrics
-          </li>
-          <li
-            className={activeTab === "performance" ? "active" : ""}
-            onClick={() => setActiveTab("performance")}
-          >
-            Performance
-          </li>
-          <li
-            className={activeTab === "query" ? "active" : ""}
-            onClick={() => setActiveTab("query")}
-          >
-            Query LLM
-          </li>
+          {tabItems.map((tab) => (
+            <li
+              key={tab.id}
+              className={activeTab === tab.id ? "active" : ""}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </li>
+          ))}
         </ul>
       </nav>
 
+      {/* Main content area */}
       <main className="dashboard-content">{renderContent()}</main>
     </div>
   );

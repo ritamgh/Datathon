@@ -10,17 +10,27 @@ import {
 } from "recharts";
 import { fetchPerformanceMetrics } from "../services/api";
 
-// Colors for different performance metrics
+/**
+ * Performance Gauges Component
+ *
+ * Displays key LLM performance metrics as semi-circular gauges
+ * including accuracy, hallucination rate, and toxicity scores.
+ */
+
+// Color schemes for different performance metrics
 const COLORS = {
-  accuracy: ["#e8eaed", "#0088FE"],
-  hallucination: ["#e8eaed", "#FF8042"],
-  toxicity: ["#e8eaed", "#FF0000"],
+  accuracy: ["#e8eaed", "#0088FE"], // Light gray and blue
+  hallucination: ["#e8eaed", "#FF8042"], // Light gray and orange
+  toxicity: ["#e8eaed", "#FF0000"], // Light gray and red
 };
 
-// RADIAN constant for angle calculations
+// Constant for angle calculations (PI/180 to convert degrees to radians)
 const RADIAN = Math.PI / 180;
 
-// Custom active shape for gauge visualization
+/**
+ * Custom active shape renderer for the gauge visualization
+ * Displays the metric name and value with decorative sectors
+ */
 const renderActiveShape = (props) => {
   const {
     cx,
@@ -36,6 +46,7 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
+      {/* Metric name text */}
       <text
         x={cx}
         y={cy - 20}
@@ -47,6 +58,8 @@ const renderActiveShape = (props) => {
       >
         {payload.name}
       </text>
+
+      {/* Metric value text */}
       <text
         x={cx}
         y={cy + 10}
@@ -57,6 +70,8 @@ const renderActiveShape = (props) => {
       >
         {value}%
       </text>
+
+      {/* Main sector for the gauge */}
       <Sector
         cx={cx}
         cy={cy}
@@ -66,6 +81,8 @@ const renderActiveShape = (props) => {
         endAngle={endAngle}
         fill={fill}
       />
+
+      {/* Outer decorative sector */}
       <Sector
         cx={cx}
         cy={cy}
@@ -79,7 +96,13 @@ const renderActiveShape = (props) => {
   );
 };
 
-// Component to create a single gauge
+/**
+ * GaugeChart component - Creates a single semi-circular gauge chart
+ * @param {Array} data - Array of objects with name and value properties
+ * @param {Array} color - Array of colors for the chart segments
+ * @param {Number} startAngle - Start angle for the gauge (default: 180)
+ * @param {Number} endAngle - End angle for the gauge (default: 0)
+ */
 const GaugeChart = ({ data, color, startAngle = 180, endAngle = 0 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -113,19 +136,24 @@ const GaugeChart = ({ data, color, startAngle = 180, endAngle = 0 }) => {
   );
 };
 
+/**
+ * Main component that displays all performance gauges
+ */
 const PerformanceGauges = () => {
+  // State management
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch performance metrics on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchPerformanceMetrics();
         setMetrics(data);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -133,13 +161,20 @@ const PerformanceGauges = () => {
     fetchData();
   }, []);
 
-  if (loading)
+  // Loading and error states
+  if (loading) {
     return <div className="card">Loading performance metrics...</div>;
-  if (error)
+  }
+
+  if (error) {
     return (
       <div className="card">Error loading performance metrics: {error}</div>
     );
-  if (!metrics) return <div className="card">No metrics available</div>;
+  }
+
+  if (!metrics) {
+    return <div className="card">No metrics available</div>;
+  }
 
   // Prepare data for the gauge charts
   const accuracyData = [
@@ -172,19 +207,23 @@ const PerformanceGauges = () => {
           justifyContent: "space-around",
         }}
       >
+        {/* Accuracy Gauge */}
         <div style={{ width: "33%", minWidth: "250px" }}>
           <GaugeChart data={accuracyData} color={COLORS.accuracy} />
         </div>
 
+        {/* Hallucination Gauge */}
         <div style={{ width: "33%", minWidth: "250px" }}>
           <GaugeChart data={hallucinationData} color={COLORS.hallucination} />
         </div>
 
+        {/* Toxicity Gauge */}
         <div style={{ width: "33%", minWidth: "250px" }}>
           <GaugeChart data={toxicityData} color={COLORS.toxicity} />
         </div>
       </div>
 
+      {/* Additional information */}
       <div style={{ marginTop: "20px" }}>
         <p>
           <strong>Sample Size:</strong> {metrics.sample_size} prompts
