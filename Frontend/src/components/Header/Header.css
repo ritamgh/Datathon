@@ -1,0 +1,118 @@
+.header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    z-index: 10;
+    background: #0d0b1a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .left-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 1.5rem;
+  }
+  
+  .model-select {
+    position: relative;
+    min-width: 120px;
+    margin-right: 1.5rem;
+  }
+  
+  .selected-model {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: #2e64fe;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .selected-model::after {
+    content: "▼";
+    font-size: 0.7rem;
+    margin-left: 8px;
+  }
+  
+  .models-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #1a1a2e;
+    border-radius: 8px;
+    margin-top: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+  }
+  
+  .model-option {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .model-option:hover {
+    background: #292945;
+  }
+  
+  .right-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+    transition: color 0.2s;
+  }
+  
+  .nav-link:hover {
+    color: white;
+  }
+  
+  .button {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .button.outline {
+    background: transparent;
+    border: 1px solid #2e64fe;
+    color: #2e64fe;
+  }
+  
+  .button.outline:hover {
+    background: rgba(46, 100, 254, 0.1);
+  }
+  
+  .button.primary {
+    background: #2e64fe;
+    border: none;
+  }
+  
+  .button.primary:hover {
+    background: #1e54ee;
+  }
