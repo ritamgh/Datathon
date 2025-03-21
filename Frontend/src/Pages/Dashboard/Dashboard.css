@@ -1,0 +1,360 @@
+/* Dashboard container with sidebar */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0d0b1a;
+  }
+  
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px;
+    background-color: #1a1a2e;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+  
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 25px 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .logo-icon {
+    color: #4cd964;
+    margin-right: 10px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .sidebar-section {
+    margin-bottom: 25px;
+  }
+  
+  .section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #a1a1b5;
+    padding: 0 20px;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .menu-item.active {
+    background-color: rgba(46, 100, 254, 0.1);
+    color: #ffffff;
+    border-left: 3px solid #2e64fe;
+  }
+  
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .menu-icon {
+    margin-right: 12px;
+  }
+  
+  .badge {
+    background-color: #ff3b30;
+    color: white;
+    font-size: 0.7rem;
+    border-radius: 10px;
+    padding: 2px 7px;
+    margin-left: auto;
+  }
+  
+  /* Main content area */
+  .dashboard-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  /* New grid layout matching the reference image */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 16px;
+  }
+  
+  /* Card positioning based on the reference image */
+  .total-revenue-card {
+    grid-column: span 4;
+    grid-row: 1;
+  }
+  
+  .sales-funnel-card {
+    grid-column: span 5;
+    grid-row: 1;
+  }
+  
+  .ongoing-sale-card {
+    grid-column: span 3;
+    grid-row: 1;
+  }
+  
+  .customers-countries-card {
+    grid-column: span 4;
+    grid-row: 2;
+  }
+  
+  .device-visits-card {
+    grid-column: span 5;
+    grid-row: 2;
+  }
+  
+  .top-products-card {
+    grid-column: span 3;
+    grid-row: 2;
+  }
+  
+  .recent-transactions-card {
+    grid-column: span 9;
+    grid-row: 3;
+  }
+  
+  .target-metrics-card {
+    grid-column: span 3;
+    grid-row: 3;
+  }
+  
+  /* Ensure the intensity chart is included */
+  .intensity-chart-card {
+    grid-column: span 3;
+    grid-row: 4;
+  }
+  
+  /* Card styling */
+  .card {
+    background-color: #1e1e2d;
+    border-radius: 12px;
+    padding: 16px;
+    height: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+  }
+  
+  .period-selector {
+    display: flex;
+    align-items: center;
+    background-color: #2a2a3a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    color: #a1a1b5;
+    cursor: pointer;
+  }
+  
+  .period-selector:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #a1a1b5;
+    margin-left: 8px;
+  }
+  
+  /* Top header with search and user info */
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1a1a2e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .top-header-left {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .top-header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #2a2a3a;
+    border-radius: 20px;
+    padding: 6px 12px;
+  }
+  
+  .search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 200px;
+    font-size: 0.9rem;
+  }
+  
+  .search-bar svg {
+    margin-right: 8px;
+    color: #a1a1b5;
+  }
+  
+  .theme-toggle, .notification-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #2a2a3a;
+    cursor: pointer;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #2e64fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .user-role {
+    font-size: 0.7rem;
+    color: #a1a1b5;
+  }
+  
+  /* Animation keyframes remain the same */
+  @keyframes pulseDot {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .refresh-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .refresh-icon:hover {
+    transform: rotate(30deg);
+  }
+  
+  .refresh-icon.spinning {
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 1200px) {
+    .dashboard-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .total-revenue-card, 
+    .sales-funnel-card,
+    .ongoing-sale-card,
+    .customers-countries-card,
+    .device-visits-card,
+    .top-products-card,
+    .recent-transactions-card,
+    .target-metrics-card {
+      grid-column: span 6;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      height: auto;
+    }
+    
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .total-revenue-card, 
+    .sales-funnel-card,
+    .ongoing-sale-card,
+    .customers-countries-card,
+    .device-visits-card,
+    .top-products-card,
+    .recent-transactions-card,
+    .target-metrics-card {
+      grid-column: span 1;
+    }
+  }

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Real-time Population Chart</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0f0f0f;
+            color: white;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: normal;
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .menu-icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            margin-bottom: 6px;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+        
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 16px;
+            height: 100%;
+            position: relative;
+        }
+        
+        .bar {
+            width: 8px;
+            border-radius: 4px;
+            position: absolute;
+            transition: height 1s ease-out, bottom 1s ease-out;
+            transform-origin: bottom;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .bar-2010 {
+            background-color: #ff3385;
+        }
+        
+        .bar-2011 {
+            background-color: #8022ef;
+        }
+        
+        .bar-2012 {
+            background-color: #ffcc00;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 2;
+            opacity: 0;
+            transition: bottom 1s ease-out;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        .legend {
+            display: flex;
+            margin-bottom: 30px;
+            padding-left: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .legend-item:hover, .legend-item.active {
+            opacity: 1;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        
+        .legend-text {
+            font-size: 14px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #aaaaaa;
+            line-height: 1.4;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background-color: #2e64fe;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #1e54ee;
+        }
+        
+        .data-source {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .data-source select {
+            background-color: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 5px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        
+        .loading-indicator {
+            display: none;
+            margin-left: 10px;
+            color: #2e64fe;
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>America</h1>
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="refreshBtn" class="btn">Refresh Data</button>
+            <button id="animateBtn" class="btn">Animate</button>
+            <span id="loadingIndicator" class="loading-indicator">Updating...</span>
+        </div>
+        
+        <div class="data-source">
+            <span>Data Source:</span>
+            <select id="dataSource">
+                <option value="sample">Sample Data</option>
+                <option value="population">Population Growth</option>
+                <option value="economic">Economic Indicators</option>
+                <option value="custom">Custom API</option>
+            </select>
+        </div>
+        
+        <div class="chart-container" id="chart">
+            <!-- Bars will be dynamically created here -->
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item active" data-year="2010">
+                <div class="legend-color" style="background-color: #ff3385;"></div>
+                <div class="legend-text">2010</div>
+            </div>
+            <div class="legend-item active" data-year="2011">
+                <div class="legend-color" style="background-color: #8022ef;"></div>
+                <div class="legend-text">2011</div>
+            </div>
+            <div class="legend-item active" data-year="2012">
+                <div class="legend-color" style="background-color: #ffcc00;"></div>
+                <div class="legend-text">2012</div>
+            </div>
+        </div>
+        
+        <div class="chart-title">Historic World Population</div>
+        <div class="chart-description">
+            Real-time visualization of population data across different regions. Toggle years to compare trends and patterns.
+        </div>
+    </div>
+
+    <script>
+        // Initial sample data for the chart
+        let chartData = [
+            {
+                bar2010: { height: 120, start: 165 }, 
+                bar2011: { height: 0, start: 0 },    
+                bar2012: { height: 110, start: 45 }  
+            },
+            {
+                bar2010: { height: 140, start: 150 }, 
+                bar2011: { height: 90, start: 50 },   
+                bar2012: { height: 0, start: 0 }      
+            },
+            {
+                bar2010: { height: 80, start: 180 },  
+                bar2011: { height: 130, start: 50 },  
+                bar2012: { height: 0, start: 0 }      
+            },
+            {
+                bar2010: { height: 100, start: 160 }, 
+                bar2011: { height: 0, start: 0 },     
+                bar2012: { height: 120, start: 40 }   
+            },
+            {
+                bar2010: { height: 130, start: 160 }, 
+                bar2011: { height: 0, start: 0 },     
+                bar2012: { height: 90, start: 60 }    
+            },
+            {
+                bar2010: { height: 0, start: 0 },     
+                bar2011: { height: 140, start: 50 },  
+                bar2012: { height: 80, start: 200 }   
+            },
+            {
+                bar2010: { height: 110, start: 150 }, 
+                bar2011: { height: 0, start: 0 },     
+                bar2012: { height: 130, start: 40 }   
+            },
+            {
+                bar2010: { height: 90, start: 190 },  
+                bar2011: { height: 110, start: 70 },  
+                bar2012: { height: 0, start: 0 }      
+            },
+            {
+                bar2010: { height: 120, start: 160 }, 
+                bar2011: { height: 0, start: 0 },     
+                bar2012: { height: 100, start: 50 }   
+            },
+            {
+                bar2010: { height: 0, start: 0 },     
+                bar2011: { height: 120, start: 60 },  
+                bar2012: { height: 140, start: 180 }  
+            },
+            {
+                bar2010: { height: 130, start: 140 }, 
+                bar2011: { height: 0, start: 0 },     
+                bar2012: { height: 120, start: 40 }   
+            },
+        ];
+        
+        // References to DOM elements
+        const chartContainer = document.getElementById('chart');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const animateBtn = document.getElementById('animateBtn');
+        const dataSourceSelect = document.getElementById('dataSource');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const legendItems = document.querySelectorAll('.legend-item');
+        
+        // State tracking
+        let activeYears = {
+            '2010': true,
+            '2011': true,
+            '2012': true
+        };
+        
+        // Function to create the chart
+        function createChart(animate = true) {
+            // Clear existing chart
+            chartContainer.innerHTML = '';
+            
+            // For each bar group in our data
+            chartData.forEach((group, index) => {
+                const barGroup = document.createElement('div');
+                barGroup.className = 'bar-group';
+                
+                // Create 2010 bar if it exists and year is active
+                if (group.bar2010.height > 0 && activeYears['2010']) {
+                    const bar2010 = document.createElement('div');
+                    bar2010.className = 'bar bar-2010';
+                    
+                    if (animate) {
+                        // Start with zero height and animate to full height
+                        bar2010.style.height = '0px';
+                        bar2010.style.bottom = group.bar2010.start + 'px';
+                        barGroup.appendChild(bar2010);
+                        
+                        // Animation delay based on index
+                        setTimeout(() => {
+                            bar2010.style.height = group.bar2010.height + 'px';
+                        }, 100 * index);
+                    } else {
+                        bar2010.style.height = group.bar2010.height + 'px';
+                        bar2010.style.bottom = group.bar2010.start + 'px';
+                        barGroup.appendChild(bar2010);
+                    }
+                    
+                    // Add dots at top and bottom
+                    addDots(barGroup, group.bar2010, '#ff3385', animate, index);
+                }
+                
+                // Create 2011 bar if it exists and year is active
+                if (group.bar2011.height > 0 && activeYears['2011']) {
+                    const bar2011 = document.createElement('div');
+                    bar2011.className = 'bar bar-2011';
+                    
+                    if (animate) {
+                        // Start with zero height and animate to full height
+                        bar2011.style.height = '0px';
+                        bar2011.style.bottom = group.bar2011.start + 'px';
+                        barGroup.appendChild(bar2011);
+                        
+                        // Animation delay based on index
+                        setTimeout(() => {
+                            bar2011.style.height = group.bar2011.height + 'px';
+                        }, 100 * index + 200);
+                    } else {
+                        bar2011.style.height = group.bar2011.height + 'px';
+                        bar2011.style.bottom = group.bar2011.start + 'px';
+                        barGroup.appendChild(bar2011);
+                    }
+                    
+                    // Add dots at top and bottom
+                    addDots(barGroup, group.bar2011, '#8022ef', animate, index);
+                }
+                
+                // Create 2012 bar if it exists and year is active
+                if (group.bar2012.height > 0 && activeYears['2012']) {
+                    const bar2012 = document.createElement('div');
+                    bar2012.className = 'bar bar-2012';
+                    
+                    if (animate) {
+                        // Start with zero height and animate to full height
+                        bar2012.style.height = '0px';
+                        bar2012.style.bottom = group.bar2012.start + 'px';
+                        barGroup.appendChild(bar2012);
+                        
+                        // Animation delay based on index
+                        setTimeout(() => {
+                            bar2012.style.height = group.bar2012.height + 'px';
+                        }, 100 * index + 400);
+                    } else {
+                        bar2012.style.height = group.bar2012.height + 'px';
+                        bar2012.style.bottom = group.bar2012.start + 'px';
+                        barGroup.appendChild(bar2012);
+                    }
+                    
+                    // Add dots at top and bottom
+                    addDots(barGroup, group.bar2012, '#ffcc00', animate, index);
+                }
+                
+                chartContainer.appendChild(barGroup);
+            });
+        }
+        
+        // Helper function to add dots to bars
+        function addDots(barGroup, barData, color, animate, index) {
+            const topDot = document.createElement('div');
+            topDot.className = 'dot';
+            topDot.style.backgroundColor = color;
+            topDot.style.left = '4px';
+            
+            const bottomDot = document.createElement('div');
+            bottomDot.className = 'dot';
+            bottomDot.style.backgroundColor = color;
+            bottomDot.style.left = '4px';
+            
+            if (animate) {
+                // Position dots at starting position
+                topDot.style.bottom = barData.start + 'px';
+                bottomDot.style.bottom = barData.start + 'px';
+                
+                // Add dots to the bar group
+                barGroup.appendChild(topDot);
+                barGroup.appendChild(bottomDot);
+                
+                // Animate dots to final position with delay
+                setTimeout(() => {
+                    topDot.style.bottom = (barData.start + barData.height - 4) + 'px';
+                    bottomDot.style.bottom = (barData.start - 4) + 'px';
+                }, 100 * index + 100);
+            } else {
+                // Position dots at final position immediately
+                topDot.style.bottom = (barData.start + barData.height - 4) + 'px';
+                bottomDot.style.bottom = (barData.start - 4) + 'px';
+                
+                // Add dots to the bar group
+                barGroup.appendChild(topDot);
+                barGroup.appendChild(bottomDot);
+            }
+        }
+        
+        // Function to fetch new data from an API or data source
+        async function fetchDataFromSource(source) {
+            loadingIndicator.style.display = 'inline';
+            
+            try {
+                // In a real application, this would be an actual API call
+                // Here we're simulating an API delay and response
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        let newData;
+                        
+                        switch(source) {
+                            case 'population':
+                                newData = generatePopulationData();
+                                break;
+                            case 'economic':
+                                newData = generateEconomicData();
+                                break;
+                            case 'custom':
+                                // Here you would connect to your custom API
+                                newData = generateCustomData();
+                                break;
+                            default:
+                                // Default to sample data
+                                newData = chartData.map(group => {
+                                    return {
+                                        bar2010: { ...group.bar2010 },
+                                        bar2011: { ...group.bar2011 },
+                                        bar2012: { ...group.bar2012 }
+                                    };
+                                });
+                        }
+                        
+                        resolve(newData);
+                    }, 1200); // Simulate network delay
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return chartData; // Return current data on error
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+        
+        // Generate random population data
+        function generatePopulationData() {
+            return Array(11).fill(0).map(() => {
+                return {
+                    bar2010: { 
+                        height: Math.floor(Math.random() * 100) + 50, 
+                        start: Math.floor(Math.random() * 100) + 50 
+                    },
+                    bar2011: { 
+                        height: Math.floor(Math.random() * 100) + 50, 
+                        start: Math.floor(Math.random() * 100) + 50 
+                    },
+                    bar2012: { 
+                        height: Math.floor(Math.random() * 100) + 50, 
+                        start: Math.floor(Math.random() * 100) + 50 
+                    }
+                };
+            });
+        }
+        
+        // Generate random economic data
+        function generateEconomicData() {
+            return Array(11).fill(0).map(() => {
+                // Economic data has an upward trend
+                return {
+                    bar2010: { 
+                        height: Math.floor(Math.random() * 50) + 50, 
+                        start: 50 
+                    },
+                    bar2011: { 
+                        height: Math.floor(Math.random() * 50) + 75, 
+                        start: 50 
+                    },
+                    bar2012: { 
+                        height: Math.floor(Math.random() * 50) + 100, 
+                        start: 50 
+                    }
+                };
+            });
+        }
+        
+        // Generate custom data (could be connected to an actual API)
+        function generateCustomData() {
+            return Array(11).fill(0).map(() => {
+                // Custom data with more variation
+                return {
+                    bar2010: { 
+                        height: Math.floor(Math.random() * 150) + 30, 
+                        start: Math.floor(Math.random() * 150) + 30 
+                    },
+                    bar2011: { 
+                        height: Math.floor(Math.random() * 150) + 30, 
+                        start: Math.floor(Math.random() * 150) + 30 
+                    },
+                    bar2012: { 
+                        height: Math.floor(Math.random() * 150) + 30, 
+                        start: Math.floor(Math.random() * 150) + 30 
+                    }
+                };
+            });
+        }
+        
+        // Function to normalize data to ensure it fits in the chart
+        function normalizeData(data) {
+            return data.map(group => {
+                // Ensure all bars fit within the chart height (300px)
+                ['bar2010', 'bar2011', 'bar2012'].forEach(barKey => {
+                    if (group[barKey].height > 0) {
+                        // Make sure bar + start position doesn't exceed chart height
+                        if (group[barKey].height + group[barKey].start > 280) {
+                            // Reduce height to fit
+                            group[barKey].height = 280 - group[barKey].start;
+                        }
+                        
+                        // Ensure minimum height
+                        if (group[barKey].height < 20) {
+                            group[barKey].height = 20;
+                        }
+                    }
+                });
+                return group;
+            });
+        }
+        
+        // Event Listeners
+        refreshBtn.addEventListener('click', async () => {
+            const selectedSource = dataSourceSelect.value;
+            refreshBtn.classList.add('pulse');
+            
+            // Fetch new data
+            const newData = await fetchDataFromSource(selectedSource);
+            
+            // Update chart data and recreate chart
+            chartData = normalizeData(newData);
+            createChart(true);
+            
+            refreshBtn.classList.remove('pulse');
+        });
+        
+        animateBtn.addEventListener('click', () => {
+            createChart(true);
+        });
+        
+        // Toggle years when clicking on legend items
+        legendItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const year = item.getAttribute('data-year');
+                
+                // Toggle active state
+                activeYears[year] = !activeYears[year];
+                
+                // Update visual state
+                if (activeYears[year]) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+                
+                // Redraw chart
+                createChart(false);
+            });
+        });
+        
+        // Handle data source change
+        dataSourceSelect.addEventListener('change', async () => {
+            const selectedSource = dataSourceSelect.value;
+            
+            // Fetch new data
+            const newData = await fetchDataFromSource(selectedSource);
+            
+            // Update chart data and recreate chart
+            chartData = normalizeData(newData);
+            createChart(true);
+        });
+        
+        // Real-time data simulation (update every 30 seconds)
+        function setupRealTimeUpdates() {
+            setInterval(async () => {
+                // Only update if not sample data
+                if (dataSourceSelect.value !== 'sample') {
+                    const newData = await fetchDataFromSource(dataSourceSelect.value);
+                    chartData = normalizeData(newData);
+                    createChart(true);
+                }
+            }, 30000); // Update every 30 seconds
+        }
+        
+        // Initialize the chart and real-time updates
+        window.addEventListener('load', () => {
+            createChart(true);
+            setupRealTimeUpdates();
+        });
+    </script>
+</body>
+</html>

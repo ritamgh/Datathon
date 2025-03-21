@@ -1,0 +1,319 @@
+.modern-dashboard {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: white;
+    background-color: #0d0b1a;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  
+  .dashboard-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .data-source-select {
+    background-color: #1e1e2d;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .data-source-select:focus {
+    border-color: #2e64fe;
+  }
+  
+  .refresh-button {
+    background-color: #2e64fe;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .refresh-button:hover {
+    background-color: #1e54ee;
+  }
+  
+  .refresh-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .stat-card.analysis {
+    background-color: rgba(255, 224, 138, 0.1);
+    grid-row: span 2;
+  }
+  
+  .stat-card.dispersion,
+  .stat-card.reinvested {
+    background-color: rgba(100, 255, 138, 0.1);
+  }
+  
+  .stat-card.error,
+  .stat-card.delayed {
+    background-color: rgba(200, 138, 255, 0.1);
+  }
+  
+  .stat-header {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  
+  .stat-card.dispersion .stat-header,
+  .stat-card.reinvested .stat-header {
+    color: rgb(100, 255, 138);
+  }
+  
+  .stat-card.error .stat-header,
+  .stat-card.delayed .stat-header {
+    color: rgb(200, 138, 255);
+  }
+  
+  .stat-card.analysis .stat-header {
+    color: rgb(255, 224, 138);
+  }
+  
+  .stat-subheader {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: 12px;
+  }
+  
+  .stat-card.dispersion .stat-subheader,
+  .stat-card.reinvested .stat-subheader {
+    color: rgb(100, 255, 138);
+  }
+  
+  .stat-card.error .stat-subheader,
+  .stat-card.delayed .stat-subheader {
+    color: rgb(200, 138, 255);
+  }
+  
+  .stat-card.analysis .stat-subheader {
+    color: rgb(255, 224, 138);
+  }
+  
+  .stat-content {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+    font-weight: 600;
+  }
+  
+  .stat-card.dispersion .stat-value,
+  .stat-card.reinvested .stat-value {
+    color: rgb(100, 255, 138);
+  }
+  
+  .stat-card.error .stat-value,
+  .stat-card.delayed .stat-value {
+    color: rgb(200, 138, 255);
+  }
+  
+  .stat-card.analysis .stat-value {
+    color: rgb(255, 224, 138);
+  }
+  
+  .stat-change {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  
+  .stat-change.positive {
+    background-color: rgba(100, 255, 138, 0.2);
+    color: rgb(100, 255, 138);
+  }
+  
+  .stat-change.negative {
+    background-color: rgba(255, 100, 138, 0.2);
+    color: rgb(255, 100, 138);
+  }
+  
+  /* Analysis card specific styles */
+  .progress-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0;
+    width: 100%;
+  }
+  
+  .progress-value {
+    position: absolute;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(255, 224, 138);
+  }
+  
+  .transaction-count {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 8px;
+    color: rgb(255, 224, 138);
+  }
+  
+  /* Chart Section */
+  .chart-section {
+    background-color: #1e1e2d;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .chart-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .chart-description {
+    font-size: 12px;
+    color: #aaa;
+  }
+  
+  .chart-container {
+    height: 300px;
+    position: relative;
+  }
+  
+  .loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(30, 30, 45, 0.7);
+    color: #aaa;
+    gap: 16px;
+    z-index: 10;
+  }
+  
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(46, 100, 254, 0.3);
+    border-radius: 50%;
+    border-top-color: #2e64fe;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .chart-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .time-periods {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .time-period {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-card.analysis {
+      grid-column: span 2;
+      grid-row: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .controls {
+      width: 100%;
+    }
+    
+    .data-source-select {
+      flex-grow: 1;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .stat-card.analysis {
+      grid-column: 1;
+    }
+    
+    .chart-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .chart-container {
+      height: 250px;
+    }
+  }
