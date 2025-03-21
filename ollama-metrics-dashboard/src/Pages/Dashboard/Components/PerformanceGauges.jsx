@@ -17,11 +17,11 @@ import {
  * including accuracy, hallucination rate, and toxicity scores.
  */
 
-// Color schemes for different performance metrics
+// Color schemes for different performance metrics - Updated colors for better contrast
 const COLORS = {
-  accuracy: ["#e8eaed", "#0088FE"], // Light gray and blue
-  hallucination: ["#e8eaed", "#FF8042"], // Light gray and orange
-  toxicity: ["#e8eaed", "#FF0000"], // Light gray and red
+  accuracy: ["#e8eaed", "#0066CC"], // Light gray and darker blue
+  hallucination: ["#e8eaed", "#FF6600"], // Light gray and deeper orange
+  toxicity: ["#e8eaed", "#CC0000"], // Light gray and deeper red
 };
 
 // Constant for angle calculations (PI/180 to convert degrees to radians)
@@ -52,7 +52,7 @@ const renderActiveShape = (props) => {
         y={cy - 20}
         dy={8}
         textAnchor="middle"
-        fill="#333"
+        fill="#000000"
         fontSize={20}
         fontWeight="bold"
       >
@@ -65,7 +65,7 @@ const renderActiveShape = (props) => {
         y={cy + 10}
         dy={8}
         textAnchor="middle"
-        fill="#333"
+        fill="#000000"
         fontSize={24}
       >
         {value}%
@@ -111,7 +111,7 @@ const GaugeChart = ({ data, color, startAngle = 180, endAngle = 0 }) => {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={250}>
       <PieChart>
         <Pie
           activeIndex={activeIndex}
@@ -163,17 +163,51 @@ const PerformanceGauges = () => {
 
   // Loading and error states
   if (loading) {
-    return <div className="card">Loading performance metrics...</div>;
+    return (
+      <div
+        className="card"
+        style={{
+          backgroundColor: "white",
+          padding: "15px",
+          maxWidth: "95%",
+          margin: "0 auto",
+        }}
+      >
+        Loading performance metrics...
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="card">Error loading performance metrics: {error}</div>
+      <div
+        className="card"
+        style={{
+          backgroundColor: "white",
+          padding: "15px",
+          maxWidth: "95%",
+          margin: "0 auto",
+        }}
+      >
+        Error loading performance metrics: {error}
+      </div>
     );
   }
 
   if (!metrics) {
-    return <div className="card">No metrics available</div>;
+    return (
+      <div
+        className="card"
+        style={{
+          backgroundColor: "white",
+          padding: "15px",
+          maxWidth: "95%",
+          margin: "0 auto",
+        }}
+      >
+        No metrics available
+      </div>
+    );
   }
 
   // Prepare data for the gauge charts
@@ -196,9 +230,26 @@ const PerformanceGauges = () => {
   ];
 
   return (
-    <div className="card">
-      <h2>Performance Metrics</h2>
-      <p>Key model performance indicators</p>
+    <div
+      className="card hover-lift"
+      style={{
+        background: "linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%)",
+        borderRadius: "12px",
+        padding: "20px",
+        maxWidth: "95%",
+        margin: "0 auto",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
+        border: "1px solid rgba(230,230,230,0.7)",
+        overflow: "hidden",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+      }}
+    >
+      <h2 style={{ color: "#333", marginBottom: "0.5rem" }}>
+        Performance Metrics
+      </h2>
+      <p style={{ color: "#666", marginTop: "0" }}>
+        Key model performance indicators
+      </p>
 
       <div
         style={{
@@ -208,24 +259,30 @@ const PerformanceGauges = () => {
         }}
       >
         {/* Accuracy Gauge */}
-        <div style={{ width: "33%", minWidth: "250px" }}>
+        <div style={{ width: "33%", minWidth: "230px" }}>
           <GaugeChart data={accuracyData} color={COLORS.accuracy} />
         </div>
 
         {/* Hallucination Gauge */}
-        <div style={{ width: "33%", minWidth: "250px" }}>
+        <div style={{ width: "33%", minWidth: "230px" }}>
           <GaugeChart data={hallucinationData} color={COLORS.hallucination} />
         </div>
 
         {/* Toxicity Gauge */}
-        <div style={{ width: "33%", minWidth: "250px" }}>
+        <div style={{ width: "33%", minWidth: "230px" }}>
           <GaugeChart data={toxicityData} color={COLORS.toxicity} />
         </div>
       </div>
 
       {/* Additional information */}
-      <div style={{ marginTop: "20px" }}>
-        <p>
+      <div
+        style={{
+          marginTop: "15px",
+          borderTop: "1px solid rgba(0,0,0,0.05)",
+          paddingTop: "15px",
+        }}
+      >
+        <p style={{ color: "#666" }}>
           <strong>Sample Size:</strong> {metrics.sample_size} prompts
         </p>
       </div>
