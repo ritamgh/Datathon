@@ -345,11 +345,10 @@ const Dashboard = () => {
           </div>
 
           {/* Optionally include the Intensity Chart if needed */}
-          {/*
-          <div className="intensity-chart-card card-animation delay-9">
-            <IntensityChart />
-          </div>
-          */}
+{/* Intensity Chart */}
+<div className="intensity-chart-card card-animation delay-9">
+  <IntensityChart />
+</div>
         </div>
       </div>
     </div>
