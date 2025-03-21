@@ -20,7 +20,7 @@ class LlamaMetricsCollector:
         self.results_dir = "metrics_results"
         os.makedirs(self.results_dir, exist_ok=True)
         
-    def query_model(self, prompt, model="llama3.2"):
+    def query_model(self, prompt, model="dolphin-mistral"):
         """Send a query to local Ollama instance"""
         data = {
             "model": model,

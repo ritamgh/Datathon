@@ -23,7 +23,7 @@ def check_ollama_available():
         print(f"Error checking Ollama availability: {str(e)}", file=sys.stderr)
         return False
 
-def query_model_direct(prompt, model="llama3.2"):
+def query_model_direct(prompt, model="dolphin-mistral"):
     """Query Ollama directly using the HTTP API (fallback method)"""
     try:
         data = {

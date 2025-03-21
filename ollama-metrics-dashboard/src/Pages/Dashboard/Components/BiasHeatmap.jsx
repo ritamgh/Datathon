@@ -10,6 +10,7 @@ import {
   Legend,
 } from "recharts";
 import { fetchHeatmapData } from "../services/api";
+import { MODEL_CHANGE_EVENT } from "../../../components/Header/Header";
 
 // Enhanced color palette for heatmap
 const ColorScale = {
@@ -83,7 +84,9 @@ const CustomTooltip = ({ active, payload }) => {
           <span>{dataPoint.topic}</span>
         </div>
         <div style={{ margin: "8px 0" }}>
-          <span style={{ color: "#555" }}>Sentiment Score:</span>{" "}
+          <span style={{ color: "#555" }}>Sentiment Score:</span> // Update the
+          CustomTooltip component to handle non-numeric values // Find this part
+          in the CustomTooltip component
           <span
             style={{
               fontWeight: "bold",
@@ -95,7 +98,9 @@ const CustomTooltip = ({ active, payload }) => {
                   : "#333",
             }}
           >
-            {dataPoint.z.toFixed(2)}
+            {typeof dataPoint.z === "number"
+              ? dataPoint.z.toFixed(2)
+              : String(dataPoint.z || "N/A")}
           </span>
         </div>
       </div>
@@ -113,47 +118,59 @@ const BiasHeatmap = () => {
   const [highlightedTopic, setHighlightedTopic] = useState(null);
   const [highlightedGroup, setHighlightedGroup] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const heatmapData = await fetchHeatmapData();
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const heatmapData = await fetchHeatmapData();
 
-        if (heatmapData.length > 0) {
-          // Extract topics from the first row (excluding 'name')
-          const topicList = Object.keys(heatmapData[0]).filter(
-            (key) => key !== "name"
-          );
-          setTopics(topicList);
+      if (heatmapData.length > 0) {
+        // Extract topics from the first row (excluding 'name')
+        const topicList = Object.keys(heatmapData[0]).filter(
+          (key) => key !== "name"
+        );
+        setTopics(topicList);
 
-          // Extract demographic groups
-          const groupList = heatmapData.map((item) => item.name);
-          setGroups(groupList);
+        // Extract demographic groups
+        const groupList = heatmapData.map((item) => item.name);
+        setGroups(groupList);
 
-          // Transform data for the heatmap
-          const transformedData = [];
-          heatmapData.forEach((row, rowIndex) => {
-            topicList.forEach((topic, colIndex) => {
-              transformedData.push({
-                x: colIndex,
-                y: rowIndex,
-                z: row[topic],
-                group: row.name,
-                topic: topic,
-              });
+        // Transform data for the heatmap
+        const transformedData = [];
+        heatmapData.forEach((row, rowIndex) => {
+          topicList.forEach((topic, colIndex) => {
+            transformedData.push({
+              x: colIndex,
+              y: rowIndex,
+              z: row[topic],
+              group: row.name,
+              topic: topic,
             });
           });
+        });
 
-          setData(transformedData);
-        }
-
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        setData(transformedData);
       }
+
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+
+    // Listen for model changes
+    const handleModelChange = () => {
+      console.log("BiasHeatmap: Model changed, fetching new data...");
+      fetchData();
     };
 
-    fetchData();
+    window.addEventListener(MODEL_CHANGE_EVENT, handleModelChange);
+    return () => {
+      window.removeEventListener(MODEL_CHANGE_EVENT, handleModelChange);
+    };
   }, []);
 
   // Function to calculate cell size based on available topics and groups

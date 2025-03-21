@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { fetchRadarData } from "../services/api";
+import { fetchRadarData, getCurrentModel } from "../services/api";
 
 // Enhanced color palette with better visual contrast
 const COLORS = [
@@ -79,7 +79,11 @@ const CustomTooltip = ({ active, payload }) => {
               style={{ backgroundColor: entry.color }}
             ></div>
             <span className="tooltip-name">{entry.name}: </span>
-            <span className="tooltip-value">{entry.value.toFixed(2)}</span>
+            <span className="tooltip-value">
+              {typeof entry.value === "number"
+                ? entry.value.toFixed(2)
+                : entry.value}
+            </span>
           </div>
         ))}
       </div>
@@ -95,37 +99,57 @@ const BiasRadarChart = () => {
   const [error, setError] = useState(null);
   const [activeGroups, setActiveGroups] = useState({});
   const [hoveredGroup, setHoveredGroup] = useState(null);
+  const [currentModelDisplay, setCurrentModelDisplay] = useState(
+    getCurrentModel()
+  );
 
-  // Fetch radar data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const radarData = await fetchRadarData();
-        setData(radarData);
+  // Function to fetch data that can be called when model changes
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const radarData = await fetchRadarData();
+      setData(radarData);
+      setCurrentModelDisplay(getCurrentModel());
 
-        // Extract group names from the first data point
-        if (radarData.length > 0) {
-          const groups = Object.keys(radarData[0]).filter(
-            (key) => key !== "subject"
-          );
-          setGroupNames(groups);
+      // Extract group names from the first data point
+      if (radarData.length > 0) {
+        const groups = Object.keys(radarData[0]).filter(
+          (key) => key !== "subject"
+        );
+        setGroupNames(groups);
 
-          // Initialize all groups as active
-          const initialActiveState = {};
-          groups.forEach((group) => {
-            initialActiveState[group] = true;
-          });
-          setActiveGroups(initialActiveState);
-        }
-
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        // Initialize all groups as active
+        const initialActiveState = {};
+        groups.forEach((group) => {
+          initialActiveState[group] = true;
+        });
+        setActiveGroups(initialActiveState);
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch radar data on initial load
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Set up event listener for model changes
+  useEffect(() => {
+    // Add event listener for model changes
+    const handleModelChange = () => {
+      fetchData();
     };
 
-    fetchData();
+    window.addEventListener("model-change-event", handleModelChange);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("model-change-event", handleModelChange);
+    };
   }, []);
 
   // Handle legend item click
